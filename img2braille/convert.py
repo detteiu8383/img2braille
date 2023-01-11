@@ -3,7 +3,11 @@ from pathlib import PurePath
 import cv2
 import numpy as np
 
-from img2braille.dithering import DITHERING_METHODS, DitherFunction, bayer_dithering
+from img2braille.binarization import (
+    BINARIZATION_METHODS,
+    BinarizationFunction,
+    bayer_binarization,
+)
 
 
 def load_gray_img(img_path: str):
@@ -37,7 +41,7 @@ def scale_img(img: cv2.Mat, width: int, line_height: float = 1.0):
     return scaled_img
 
 
-def dithering(img: cv2.Mat, method: DitherFunction):
+def binarization(img: cv2.Mat, method: BinarizationFunction):
     uint8_img = img.astype(np.uint8)
     return method(uint8_img)
 
@@ -126,7 +130,9 @@ def img_to_brailles(
     """
     scaled_img = scale_img(img, width * 2, line_height)  # 1 braille = 2 pixel width
 
-    bin_img = dithering(scaled_img, DITHERING_METHODS.get(method, bayer_dithering))
+    bin_img = binarization(
+        scaled_img, BINARIZATION_METHODS.get(method, bayer_binarization)
+    )
     if invert:
         bin_img = ~bin_img
 

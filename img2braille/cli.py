@@ -1,6 +1,6 @@
 import argparse
 
-from . import convert, dithering
+from . import binarization, convert
 
 
 def command(
@@ -35,8 +35,8 @@ def main():
         "-m",
         "--method",
         type=str,
-        choices=list(dithering.DITHERING_METHODS.keys()),
-        help="Method to use for dithering.",
+        choices=list(binarization.BINARIZATION_METHODS.keys()),
+        help="Method to use for binarization.",
     )
     parser.add_argument(
         "-l", "--line-height", type=float, help="Line height of output environment."

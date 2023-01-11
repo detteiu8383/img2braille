@@ -3,15 +3,15 @@ from typing import Callable, TypeAlias
 
 import numpy as np
 
-DitherFunction: TypeAlias = Callable[
+BinarizationFunction: TypeAlias = Callable[
     [np.ndarray[int, np.dtype[np.uint8]]], np.ndarray[int, np.dtype[np.bool_]]
 ]
 
 
-def bayer_dithering(
+def bayer_binarization(
     img: np.ndarray[int, np.dtype[np.uint8]]
 ) -> np.ndarray[int, np.dtype[np.bool_]]:
-    """Bayer dithering.
+    """Bayer binarization.
 
     Args:
         img (ndarray[int, dtype[uint8]]): Input image
@@ -36,4 +36,18 @@ def bayer_dithering(
     return img > threshold
 
 
-DITHERING_METHODS = {"bayer": bayer_dithering}
+def threshold_binarization(
+    img: np.ndarray[int, np.dtype[np.uint8]]
+) -> np.ndarray[int, np.dtype[np.bool_]]:
+    """Threshold binarization.
+
+    Args:
+        img (ndarray[int, dtype[uint8]]): Input image
+
+    Returns:
+        ndarray[int, dtype[bool_]]: If pixel is white, True
+    """
+    return img > 127
+
+
+BINARIZATION_METHODS = {"bayer": bayer_binarization, "threshold": threshold_binarization}
