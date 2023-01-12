@@ -7,15 +7,15 @@ def command(
     img_path: str,
     width: int,
     invert: bool = False,
-    method: str = "bayer",
+    method: str = "floyd-steinberg",
     line_height: float = 1.0,
 ):
     invert = invert or False
-    method = method or "bayer"
+    method = method or "floyd-steinberg"
     line_height = line_height or 1.0
 
-    gray_img = convert.load_gray_img(img_path)
-    brailles = convert.img_to_brailles(gray_img, width, invert, method, line_height)
+    img = convert.load_img(img_path)
+    brailles = convert.img_to_brailles(img, width, invert, method, line_height)
 
     return "\n".join("".join(braille_row) for braille_row in brailles)
 

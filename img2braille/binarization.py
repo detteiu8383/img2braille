@@ -274,12 +274,12 @@ def otsu_binarization(
 
 
 BINARIZATION_METHODS = {
-    "bayer": bayer_binarization,
-    "threshold": threshold_binarization,
-    "otsu": otsu_binarization,
     "floyd-steinberg": floyd_steinberg_dithering,
     "jajuni": ja_ju_ni_dithering,
     "atkinson": atkinson_dithering,
     "sierra": sierra_dithering,
     "sierra-lite": sierra_lite_dithering,
+    "bayer": bayer_binarization,
+    "threshold": threshold_binarization,
+    "otsu": otsu_binarization,
 }

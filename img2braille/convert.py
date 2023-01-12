@@ -10,7 +10,7 @@ from img2braille.binarization import (
 )
 
 
-def load_gray_img(img_path: str):
+def load_img(img_path: str):
     """Load an image as a grayscale numpy array.
 
     Args:
@@ -20,7 +20,7 @@ def load_gray_img(img_path: str):
         ndarray: The image as a numpy array.
     """
     path_str = str(PurePath(img_path))
-    return cv2.cvtColor(cv2.imread(path_str), code=cv2.COLOR_BGR2GRAY)
+    return cv2.imread(path_str)
 
 
 def scale_img(img: cv2.Mat, width: int, line_height: float = 1.0):
@@ -148,7 +148,8 @@ def img_to_brailles(
     Returns:
         list[list[str]]: 2D list of braille characters
     """
-    scaled_img = scale_img(img, width * 2, line_height)  # 1 braille = 2 pixel width
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    scaled_img = scale_img(gray_img, width * 2, line_height)  # 1 braille = 2 pixel width
 
     bin_img = binarization(
         scaled_img, BINARIZATION_METHODS.get(method, bayer_binarization)
