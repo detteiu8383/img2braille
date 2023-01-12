@@ -1,11 +1,11 @@
 import numpy as np
 
-from img2braille.convert import convert_2x4_to_braille_int, int_to_braille
+from img2braille.convert import img_to_braille_id, int_to_braille
 
 
 def tile_to_braille(tile: list[list[int]]):
     ndarray = np.array(tile, dtype=np.bool_)
-    return int_to_braille(convert_2x4_to_braille_int(ndarray))
+    return int_to_braille(img_to_braille_id(ndarray)[0, 0])
 
 
 def test_tile_to_braille():

@@ -77,6 +77,26 @@ def split_2x4(bin_img: np.ndarray):
     return [np.hsplit(row, w_count) for row in np.vsplit(bin_img, h_count)]
 
 
+def img_to_braille_id(
+    bin_img: np.ndarray[int, np.dtype[np.bool_]]
+) -> np.ndarray[int, np.dtype[np.uint8]]:
+    # fmt: off
+    kernel = np.array(
+        [
+            [1 << 0, 1 << 3],
+            [1 << 1, 1 << 4],
+            [1 << 2, 1 << 5],
+            [1 << 6, 1 << 7]
+        ],
+        dtype=np.uint8
+    )
+    # fmt: on
+    h, w = bin_img.shape[:2]
+    shape = (h // 4, w // 2, 4, 2)
+    strided_image = np.lib.stride_tricks.as_strided(bin_img, shape, (w * 4, 2, w, 1))
+    return np.einsum("kl,ijkl->ij", kernel, strided_image)
+
+
 def convert_2x4_to_braille_int(tile: np.ndarray[int, np.dtype[np.bool_]]):
     # fmt: off
     weight = np.array(
@@ -137,11 +157,8 @@ def img_to_brailles(
         bin_img = ~bin_img
 
     padded_img = padding_img(bin_img)
-    tiles = split_2x4(padded_img)
 
-    brailles = [
-        [int_to_braille(convert_2x4_to_braille_int(tile)) for tile in row]
-        for row in tiles
-    ]
+    ids = img_to_braille_id(padded_img)
+    brailles = [[int_to_braille(id) for id in row] for row in ids]
 
     return brailles
